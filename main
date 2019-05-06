@@ -81,7 +81,7 @@ def main():
 
     machineWeeks = 0
     numProductsHum = eval(input("How many products an hour does the person make? "))
-    numHoursHum = eval(input("How many hours a week does your employee work ?"))
+    numHoursHum = eval(input("How many hours a week does your employee work? "))
     numWeeksHum = eval(input("How many weeks per year does your employee work? "))
     numProductsMach = eval(input("How many products an hour does the machine make? "))
     numHoursMach = eval(input("How many hours a week is the machine operating? "))
