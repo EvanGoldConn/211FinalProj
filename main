@@ -80,28 +80,30 @@ def main():
     #equipment = print(input("What is the cost of the machine?"))
 
     machineWeeks = 0
-    numProductsHum = eval(input("How many products an hour does the person make? "))
-    numHoursHum = eval(input("How many hours a week does your employee work? "))
-    numWeeksHum = eval(input("How many weeks per year does your employee work? "))
-    numProductsMach = eval(input("How many products an hour does the machine make? "))
-    numHoursMach = eval(input("How many hours a week is the machine operating? "))
-    numWeeksMach = str(input("Does your machine operate year-round? Answer 'yes' or 'no'. "))
+    print("The purpose of this program is to help you decide whether it is more valuable \n"
+          "to you to higher an employee (paid at a specific wage) or to lease a machine \n"
+          "to do the same job. This program accounts for human error, working speed and \n"
+          "maintenance costs.\n")
+    name = input("What machine are you thinking of leasing? ")
+    numProductsMach = eval(input("How many products an hour does the "+name+" make? "))
+    numHoursMach = eval(input("How many hours a week is the "+ name+" operating? "))
+    numWeeksMach = str(input("Does the "+name+" operate year-round? Answer 'yes' or 'no'. "))
     if numWeeksMach == "yes":
         machineWeeks += 52
     elif numWeeksMach == "no":
         machineWeeks += int(input("How many weeks per year does the machine operate? "))
+    numProductsHum = eval(input("How many products an hour does your employee make? "))
+    numHoursHum = eval(input("How many hours a week does your employee work? "))
+    numWeeksHum = eval(input("How many weeks per year does your employee work? "))
     rawMaterialCost = eval(input("Cost of raw material per piece of product? "))
-    laborCost = eval(input("How much (per hour) do you pay the employee?"))
+    laborCost = eval(input("How much (per hour) do you pay the employee? "))
     
     
-    
-    
-   
-    
+
     hoursOfUseHum = numHoursHum * numWeeksHum
     
     laborCostYear = laborCost * hoursOfUseHum
-    print(laborCostYear)
+    #print(laborCostYear)
     #print(hoursOfUseHum)
     hoursOfUseMach = numHoursMach * machineWeeks
     #print(hoursOfUseMach)
@@ -115,7 +117,7 @@ def main():
     
     
      #asking machine repair questions here: 
-    maintenanceFreq = eval(input("How often does the machine have to be inspected (per month)? "))
+    maintenanceFreq = eval(input("How often does the "+name+" have to be inspected (per month)? "))
     #repairFreq = eval(input("How many repairs per month (on average)?"))
     maintenanceCost = eval(input("How much does a single inspection visit cost? "))
     repairCost = eval(input("How much does a single repair cost? "))
@@ -124,14 +126,18 @@ def main():
     
     costs = maintenance(iterations, maintenanceFreq, maintenanceCost, repairCost)
     mCosts , rCosts = costs[0] , costs[1]
-    print("Maintenance Costs: $", str(round(mCosts, 2)),"\nCalculated repair costs: $", str(round(rCosts, 2)))
+    print("Maintenance Costs per year: $" + str(round(mCosts, 2)) ,"\nCalculated repair costs per year: $"+ str(round(rCosts, 2)))
 
 
     productCost = eval(input("How much do you sell your product for? (A single item)"))
     totalPCost = productCost - rawMaterialCost
     numberSold = (numProductsMach-numProductsHum)*totalPCost
     annualSavings = ((materialSavings-mCosts-rCosts)+laborCostYear)+numberSold
-    print("Annual Savings from leasing the machine: $"+str(round(annualSavings, 2)))
+    print("Annual Savings from leasing the "+name+": $"+str(round(annualSavings, 2)))
+    
+    leaseTerm = eval(input("How long is the lease for in months? "))
+    calculatedSavings = annualSavings * (leaseTerm/12)
+    print("Savings from leasing "+name+" opposed to paying an employee: $" + str(round(calculatedSavings, 2))
 
     
 
