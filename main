@@ -1,52 +1,84 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Fri May  3 19:41:45 2019
 
-@author: evangoldsmith
+
+import random
+
 """
+Rate of creation per HOUR
+Example: A person created 10 shirts in one hour, a machine created 20 shirts
+Therefore the machine is 100% faster
+"""
+def materialSimulation(iterations, materialCost, personLaborRate, machineLaborRate):
+    humanMistakes = [1,2,3]
+    
+
+    humanArticlesMade = 0
+    for i in range(iterations):
+        machineMistakes = random.randint(0,1)
+        personMistakes = random.randint(1,4)
+        personMistakes = personMistakes/100
+
+        #rawMaterialCost * number of mistakes
+        
+
+
+
+
+        
+        humanProduction = (personLaborRate-personMistakes)
+        humanArticlesMade += humanProduction #concatenation and adding how many
+                                             #articles made
+
+        #comparing rate of mistakes made NOT products made in x hrs
+        
+        
+
+    humanProduction = personLaborRate*iterations
+    machineProduction = machineLaborRate*iterations
+
+    difference = machineProduction - humanProduction
+    
+
+
+
+
+
+
 
 def main():
-    import pandas as pd
-    import matplotlib.pyplot as plt
-    df = pd.read_csv("yahoo.csv")
 
-    df = df.iloc[0:252, 0:2]
-    prices = df["Open"]
-    dates = df["Date"]
-    
-    savedDict = {}
-#    print(prices)
-    
-    
-#    answer = str(round(answer, 2))
+
+    equipment = print(input("What is the cost of the machine?"))
+
+
+    products = print(input("How many products a year does the person make?"))
+    machine = print(input("How many products a year does the machine make?"))
+    rawMaterialCost = print(input("Cost of raw material per piece of product?"))
+
+
+##    Maintenance Costs:
+##    How much does one maintenance checkup cost?*Average number of times there
+##    is a checkup needed 
+##    
+##
+##    Raw Material Savings:
+##    How much does material cost per piece?
+##    How much does machine produce per hour per thing of material?
+##    How much does a person produce per hour per thing of material?
+##    Subtract and calculate difference
+##
+##    Labor savings:
+##    Cost per hour for person TIMES hour spent 
+##    versus
+##    How many times a year do you repair machine, what is cost?
+    #Can do standard devation to get average
 
     
-    for i in range(len(prices)):
-        if(i > 0):
-            dailyPrice = prices[i]
-            date = dates[i]
-            i = i-1
-            yesterdayPrice = prices[i]
-            priceDifference = (dailyPrice-yesterdayPrice)
-            priceDifference = round(priceDifference, 5)
-            savedDict[date] = priceDifference
-        
-        
-    print(savedDict)
-    
-    i/i+0.000i
-    i/i+
-    .28 
-     _ 
-     1
-    for data in savedDict:
-        print(savedDict[data])
-    
-    
-#    print(prices)
-    
-    
-    
-    
+
+
 main()
+
+
+
+
+
+    
