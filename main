@@ -137,7 +137,7 @@ def main():
     
     leaseTerm = eval(input("How long is the lease for in months? "))
     calculatedSavings = annualSavings * (leaseTerm/12)
-    print("Savings from leasing "+name+" opposed to paying an employee: $" + str(round(calculatedSavings, 2))
+    print("Savings from leasing "+name+" opposed to paying an employee: $" + str(round(calculatedSavings, 2)))
 
     
 
