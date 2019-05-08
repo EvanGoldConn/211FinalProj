@@ -1,18 +1,8 @@
 import random
 
-"""
-Rate of creation per HOUR
-Example: A person created 10 shirts in one hour, a machine created 20 shirts
-Therefore the machine is 100% faster
-"""
-
-
-def materialSimulation(iterations, materialCost, numProductsHum, numProductsMach, workingHoursHum, workingHoursMach):#, personLaborRate, machineLaborRate):
-    #humanMistakes = [1,2,3]
-    
+def materialSimulation(iterations, materialCost, numProductsHum, numProductsMach, workingHoursHum, workingHoursMach):
     humanCost = 0
     machCost = 0
-    #humanArticlesMade = 0
     for i in range(iterations):
         machineMistakes = random.random()
         #print(machineMistakes)
@@ -30,14 +20,6 @@ def materialSimulation(iterations, materialCost, numProductsHum, numProductsMach
         machCost += productMistakeMach 
         #numProductsMach is determined by number of pieces a machine makes in 1 year
         
-        #humanProduction = (personLaborRate-personMistakes)
-        #humanArticlesMade += humanProduction #concatenation and adding how many
-                                             #articles made
-
-        #comparing rate of mistakes made NOT products made in x hrs
-        
-    #humanProduction = personLaborRate*iterations
-    #machineProduction = machineLaborRate*iterations
     
     mistakeCostHum = (humanCost*materialCost)/iterations
     
@@ -49,16 +31,15 @@ def materialSimulation(iterations, materialCost, numProductsHum, numProductsMach
     
     
     
-def maintenance(iterations, mFreq, mCost, rCost):
+def maintenance(iterations, mFreq, machQual, mCost, rCost):
     maintenanceYear = mFreq * 12
     rFreq = 0
-    quality = int(input("What is the quality of the machine(1-2-3)? | (3 being very good) "))
     for i in range(iterations):
-        if(quality == 1):
+        if(machQual == 1):
             rFreq += (random.random()/12.5) #percentage is 8%
-        elif(quality == 2):
+        elif(machQual == 2):
             rFreq += (random.random()/25) #percentage is 4%
-        elif(quality == 3):
+        elif(machQual == 3):
             rFreq += (random.random()/50) #percentage is 1.7%
     rFreq = rFreq/iterations   
     
@@ -72,6 +53,35 @@ def maintenance(iterations, mFreq, mCost, rCost):
     #print(repairCost)
     costs = [maintenanceCost, repairCost]
     return costs
+
+def simulation(machUnitsPerHour, humUnitsPerHour, hoursOfUseMach, hoursOfUseHum,
+               humPay, rawMaterialCost, productPrice, profitMargin, materialCost,
+               materialSavings, mCosts, rCosts, annualSavings):
+    print("\nASSUMED VALUES:\n")
+    print("Units produced by machine per hour: "+ str(machUnitsPerHour))
+    print("Units produced by human per hour: " +str(humUnitsPerHour))
+    print("Total hours of machine use per year: "+str(hoursOfUseMach))
+    print("Total working hours by employee per year: "+str(hoursOfUseHum))
+    print("Hourly wage of employee: $"+str(humPay)+"/hour")
+    print("The raw material cost is: $"+str(rawMaterialCost))
+    print("The product selling price is: $"+str(productPrice))
+    print("The profit margin is: $"+str(profitMargin)+"\n")
+    
+    print("CALCULATED COSTS:\n")
+    
+    print("Cost due to human mistake: $" + str(round(materialCost[0], 2)))
+    print("Cost due to machine mistake: $" + str(round(materialCost[1], 2)))
+    print("Material Savings: $"+str(materialSavings))
+    print("Maintenance Costs per year: $" + str(round(mCosts, 2)))
+    print("Repair costs per year: $"+ str(round(rCosts, 2))+"\n")
+    
+    print("SAVINGS:")
+    print("*note* These values do not account for the upfront \n       cost of lease."
+          " It wouldn't be cost efficient \n       if the lease is less than these saving amounts.\n")
+    leaseTerm = 3
+    for i in range(4):
+        print(str(leaseTerm)+" month lease: $"+str(round(annualSavings * (leaseTerm/12), 2)))
+        leaseTerm += 3
     
 
 def main():
@@ -86,93 +96,184 @@ def main():
 
     machineWeeks = 0
     print("The purpose of this program is to help you decide whether it is more valuable "
-          "to you to higher an employee (paid at a specific wage) or to lease a machine "
+          "to higher an employee (paid at a specific wage) or to lease a machine "
           "to do the same job. This program accounts for human error, working speed and "
           "maintenance costs.\n")
-    name = input("What machine are you thinking of leasing? ")
-    numProductsMach = eval(input("How many units an hour does the "+name+" operate on? "))
-    numHoursMach = eval(input("How many hours a week is the "+ name+" operating? "))
-    numWeeksMach = str(input("Does the "+name+" operate year-round(52 weeks)? Answer 'yes' or 'no'. "))
-    if numWeeksMach == "yes":
-        machineWeeks += 52
-    elif numWeeksMach == "no":
-        machineWeeks += int(input("How many weeks per year does the machine operate? "))
+    
+    userAnswer = int(input("Would you like to see possible options(1)? Or input your own data(2)? "))
+    
+    if(userAnswer == 2):
+        name = input("What machine are you thinking of leasing? ")
+        numProductsMach = eval(input("How many units an hour does the "+name+" operate on? "))
+        numHoursMach = eval(input("How many hours a week is the "+ name+" operating? "))
+        numWeeksMach = str(input("Does the "+name+" operate year-round(52 weeks)? Answer 'yes' or 'no'. "))
+        if numWeeksMach == "yes":
+            machineWeeks += 52
+        elif numWeeksMach == "no":
+            machineWeeks += int(input("How many weeks per year does the machine operate? "))
+            
+        numProductsHum = eval(input("How many units an hour does your employee work on? "))
+        numHoursHum = eval(input("How many hours a week does your employee work? "))
+        numWeeksHum = eval(input("How many weeks per year does your employee work? "))
+        laborCost = eval(input("How much (per hour) do you pay the employee? "))
+        rawMaterialCost = eval(input("Cost of raw materials per unit of product? "))
+    
+    
+        hoursOfUseHum = numHoursHum * numWeeksHum
         
-    numProductsHum = eval(input("How many units an hour does your employee work on? "))
-    numHoursHum = eval(input("How many hours a week does your employee work? "))
-    numWeeksHum = eval(input("How many weeks per year does your employee work? "))
-    laborCost = eval(input("How much (per hour) do you pay the employee? "))
-    rawMaterialCost = eval(input("Cost of raw materials per unit of product? "))
+        laborCostYear = laborCost * hoursOfUseHum
+        #print(laborCostYear)
+        #print(hoursOfUseHum)
+        hoursOfUseMach = numHoursMach * machineWeeks
+        
+        totalProductsHum = numProductsHum *hoursOfUseHum
+        totalProductsMach = numProductsMach *hoursOfUseMach
+        #print(hoursOfUseMach)
+        
+        materialCost = materialSimulation(iterations, rawMaterialCost, numProductsHum, numProductsMach, hoursOfUseHum, hoursOfUseMach)
+        print("Cost due to human mistake: $" + str(round(materialCost[0], 2)))
+        print("Cost due to machine mistake: $" + str(round(materialCost[1], 2)))
+        print("Material Savings: $"+str(round(materialCost[0]-materialCost[1], 2)))
+        
+        materialSavings = round(materialCost[0]-materialCost[1], 2)
+        
+        
+         #asking machine repair questions here: 
+        maintenanceFreq = eval(input("How often does the "+name+" have to be inspected (per month)? "))
+        #repairFreq = eval(input("How many repairs per month (on average)?"))
+        maintenanceCost = eval(input("How much does an inspection cost? "))
+        repairCost = eval(input("How much does a single repair cost (on average)? "))
+        quality = int(input("What is the quality of the machine(1-2-3)? | (3 being very good) "))
+        
+        
+        
+        costs = maintenance(iterations, maintenanceFreq, quality, maintenanceCost, repairCost)
+        mCosts , rCosts = costs[0] , costs[1]
+        print("Maintenance Costs per year: $" + str(round(mCosts, 2)) ,"\nRepair costs per year: $"+ str(round(rCosts, 2)))
+    
+    
+        productCost = eval(input("How much do you sell your product for? (A single unit) "))
+        totalPCost = productCost - rawMaterialCost
+        numberSold = (totalProductsMach-totalProductsHum)*totalPCost
+        annualSavings = ((materialSavings-mCosts-rCosts)+laborCostYear)+numberSold
+        print("Annual Savings from leasing the "+name+": $"+str(round(annualSavings, 2)))
+        
+        leaseTerm = eval(input("How long is the lease for in months? "))
+        calculatedSavings = annualSavings * (leaseTerm/12)
+        print("Savings from leasing the "+name+" opposed to paying an employee: $" + str(round(calculatedSavings, 2)))
+        print("It isn't cost efficient to pay for a lease more than: $" + str(round(calculatedSavings, 2)))
+        
+    elif(userAnswer == 1):
+        options = int(input("Which machine lease example would you like to see?\nPlease input number\n"
+                            "1. Wood Splitter\n2. Clothing Design Printer\n3. Industrial Welder\nChoice: "))
+        if (options == 1):  #wood splitter
+            machUnitsPerHour = 350
+            machHoursPerWeek = 40
+            machWeeksPerYear = 30
+            humUnitsPerHour = 100
+            humHoursPerWeek = 40
+            humWeeksPerYear = 30
+            humPay = 15
+            rawMaterialCost = 0.35
+            
+            hoursOfUseHum = humHoursPerWeek * humWeeksPerYear
+            laborCostYear = humPay * hoursOfUseHum
+            hoursOfUseMach = machHoursPerWeek * machWeeksPerYear
+            materialCost = materialSimulation(iterations, rawMaterialCost, humUnitsPerHour, machUnitsPerHour, hoursOfUseHum, hoursOfUseMach)
+            
+            numProductsHum = humUnitsPerHour *hoursOfUseHum
+            numProductsMach = machUnitsPerHour * hoursOfUseMach
+            inspectFreq = 2
+            inspectCost = 40
+            repairCost = 350
+            machQual = 2
+            productPrice = 1.20
+            profitMargin = productPrice - rawMaterialCost
+            materialSavings = round(materialCost[0]-materialCost[1], 2)
+        
+            costs = maintenance(iterations, inspectFreq, machQual, inspectCost, repairCost)
+            mCosts , rCosts = costs[0] , costs[1]
+           
+            totalPCost = productPrice - rawMaterialCost
+            numberSold = (numProductsMach-numProductsHum)*totalPCost
+            annualSavings = ((materialSavings-mCosts-rCosts)+laborCostYear)+numberSold
+        
+            simulation(machUnitsPerHour, humUnitsPerHour, hoursOfUseMach, hoursOfUseHum,
+                       humPay, rawMaterialCost, productPrice, profitMargin, materialCost,
+                       materialSavings, mCosts, rCosts, annualSavings)
+            
+        if (options == 2): #clothing design printer
+            machUnitsPerHour = 50
+            machHoursPerWeek = 40
+            machWeeksPerYear = 52
+            humUnitsPerHour = 30
+            humHoursPerWeek = 40
+            humWeeksPerYear = 46.8 #average weeks per year for a full time employee
+            humPay = 10 #minimum wage in CT
+            rawMaterialCost = 1.20
+            
+            hoursOfUseHum = humHoursPerWeek * humWeeksPerYear
+            laborCostYear = humPay * hoursOfUseHum
+            hoursOfUseMach = machHoursPerWeek * machWeeksPerYear
+            materialCost = materialSimulation(iterations, rawMaterialCost, humUnitsPerHour, machUnitsPerHour, hoursOfUseHum, hoursOfUseMach)
+            
+            numProductsHum = humUnitsPerHour *hoursOfUseHum
+            numProductsMach = machUnitsPerHour * hoursOfUseMach
+            inspectFreq = 1
+            inspectCost = 75
+            repairCost = 500
+            machQual = 3
+            productPrice = 5.75
+            profitMargin = productPrice - rawMaterialCost
+            materialSavings = round(materialCost[0]-materialCost[1], 2)
+        
+            costs = maintenance(iterations, inspectFreq, machQual, inspectCost, repairCost)
+            mCosts , rCosts = costs[0] , costs[1]
+           
+            totalPCost = productPrice - rawMaterialCost
+            numberSold = (numProductsMach-numProductsHum)*totalPCost
+            annualSavings = ((materialSavings-mCosts-rCosts)+laborCostYear)+numberSold
+        
+            simulation(machUnitsPerHour, humUnitsPerHour, hoursOfUseMach, hoursOfUseHum,
+                       humPay, rawMaterialCost, productPrice, profitMargin, materialCost,
+                       materialSavings, mCosts, rCosts, annualSavings)
+            
+        if (options == 3):  #welder
+            machUnitsPerHour = 200
+            machHoursPerWeek = 40
+            machWeeksPerYear = 52
+            humUnitsPerHour = 100
+            humHoursPerWeek = 70  #welder's are known for working overtime
+            humWeeksPerYear = 46.8 #average weeks per year for a full time employee
+            humPay = 18 #it is strenuous and dangerous so welders get paid a decent amount
+            rawMaterialCost = 3.50 #metal is typically more expensive
+            
+            hoursOfUseHum = humHoursPerWeek * humWeeksPerYear
+            laborCostYear = humPay * hoursOfUseHum
+            hoursOfUseMach = machHoursPerWeek * machWeeksPerYear
+            materialCost = materialSimulation(iterations, rawMaterialCost, humUnitsPerHour, machUnitsPerHour, hoursOfUseHum, hoursOfUseMach)
+            
+            numProductsHum = humUnitsPerHour *hoursOfUseHum
+            numProductsMach = machUnitsPerHour * hoursOfUseMach
+            inspectFreq = 3
+            inspectCost = 50
+            repairCost = 1000
+            machQual = 3
+            productPrice = 8.50
+            profitMargin = productPrice - rawMaterialCost
+            materialSavings = round(materialCost[0]-materialCost[1], 2)
+        
+            costs = maintenance(iterations, inspectFreq, machQual, inspectCost, repairCost)
+            mCosts , rCosts = costs[0] , costs[1]
+           
+            totalPCost = productPrice - rawMaterialCost
+            numberSold = (numProductsMach-numProductsHum)*totalPCost
+            annualSavings = ((materialSavings-mCosts-rCosts)+laborCostYear)+numberSold
+        
+            simulation(machUnitsPerHour, humUnitsPerHour, hoursOfUseMach, hoursOfUseHum,
+                       humPay, rawMaterialCost, productPrice, profitMargin, materialCost,
+                       materialSavings, mCosts, rCosts, annualSavings)
 
     
-    
 
-    hoursOfUseHum = numHoursHum * numWeeksHum
-    
-    laborCostYear = laborCost * hoursOfUseHum
-    #print(laborCostYear)
-    #print(hoursOfUseHum)
-    hoursOfUseMach = numHoursMach * machineWeeks
-    #print(hoursOfUseMach)
-    
-    materialCost = materialSimulation(iterations, rawMaterialCost, numProductsHum, numProductsMach, hoursOfUseHum, hoursOfUseMach)
-    print("Cost due to human mistake: $" + str(round(materialCost[0], 2)))
-    print("Cost due to machine mistake: $" + str(round(materialCost[1], 2)))
-    print("Material Savings: $"+str(round(materialCost[0]-materialCost[1], 2)))
-    
-    materialSavings = round(materialCost[0]-materialCost[1], 2)
-    
-    
-     #asking machine repair questions here: 
-    maintenanceFreq = eval(input("How often does the "+name+" have to be inspected (per month)? "))
-    #repairFreq = eval(input("How many repairs per month (on average)?"))
-    maintenanceCost = eval(input("How much does an inspection cost? "))
-    repairCost = eval(input("How much does a single repair cost (on average)? "))
-    
-    
-    
-    costs = maintenance(iterations, maintenanceFreq, maintenanceCost, repairCost)
-    mCosts , rCosts = costs[0] , costs[1]
-    print("Maintenance Costs per year: $" + str(round(mCosts, 2)) ,"\nCalculated repair costs per year: $"+ str(round(rCosts, 2)))
-
-
-    productCost = eval(input("How much do you sell your product for? (A single unit) "))
-    totalPCost = productCost - rawMaterialCost
-    numberSold = (numProductsMach-numProductsHum)*totalPCost
-    annualSavings = ((materialSavings-mCosts-rCosts)+laborCostYear)+numberSold
-    print("Annual Savings from leasing the "+name+": $"+str(round(annualSavings, 2)))
-    
-    leaseTerm = eval(input("How long is the lease for in months? "))
-    calculatedSavings = annualSavings * (leaseTerm/12)
-    print("Savings from leasing the "+name+" opposed to paying an employee: $" + str(round(calculatedSavings, 2)))
-    print("It isn't cost efficient to pay for a lease more than: $" + str(round(calculatedSavings, 2)))
-
-    
-
-##    Maintenance Costs:
-    
-    
-##    How much does one maintenance checkup cost?*Average number of times there
-##    is a checkup needed 
-##    
-##
-##    Raw Material Savings:
-##    How much does material cost per piece?
-##    How much does machine produce per hour per thing of material?
-##    How much does a person produce per hour per thing of material?
-##    Subtract and calculate difference
-##
-##    Labor savings:
-##    Cost per hour for person TIMES hour spent 
-##    versus
-##    How many times a year do you repair machine, what is cost?
-    #Can do standard devation to get average
-
-    
-
-main()
-
-
-
-
-    
+main()   
