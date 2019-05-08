@@ -52,7 +52,7 @@ def materialSimulation(iterations, materialCost, numProductsHum, numProductsMach
 def maintenance(iterations, mFreq, mCost, rCost):
     maintenanceYear = mFreq * 12
     rFreq = 0
-    quality = int(input("What is the quality of the machine(1-2-3)? | (3 being very good)"))
+    quality = int(input("What is the quality of the machine(1-2-3)? | (3 being very good) "))
     for i in range(iterations):
         if(quality == 1):
             rFreq += (random.random()/12.5) #percentage is 8%
@@ -75,28 +75,35 @@ def maintenance(iterations, mFreq, mCost, rCost):
     
 
 def main():
+    
+    #potential machines to lease
+    #industrial dishwasher opposed to manually washing dishes
+    #t-shirt printer opposed to manually printing t-shirts
+    #wood-splitter opposed to manually splitting wood
 
     iterations = 1000000 #ten thousand to start
     #equipment = print(input("What is the cost of the machine?"))
 
     machineWeeks = 0
-    print("The purpose of this program is to help you decide whether it is more valuable \n"
-          "to you to higher an employee (paid at a specific wage) or to lease a machine \n"
-          "to do the same job. This program accounts for human error, working speed and \n"
+    print("The purpose of this program is to help you decide whether it is more valuable "
+          "to you to higher an employee (paid at a specific wage) or to lease a machine "
+          "to do the same job. This program accounts for human error, working speed and "
           "maintenance costs.\n")
     name = input("What machine are you thinking of leasing? ")
-    numProductsMach = eval(input("How many products an hour does the "+name+" make? "))
+    numProductsMach = eval(input("How many units an hour does the "+name+" operate on? "))
     numHoursMach = eval(input("How many hours a week is the "+ name+" operating? "))
-    numWeeksMach = str(input("Does the "+name+" operate year-round? Answer 'yes' or 'no'. "))
+    numWeeksMach = str(input("Does the "+name+" operate year-round(52 weeks)? Answer 'yes' or 'no'. "))
     if numWeeksMach == "yes":
         machineWeeks += 52
     elif numWeeksMach == "no":
         machineWeeks += int(input("How many weeks per year does the machine operate? "))
-    numProductsHum = eval(input("How many products an hour does your employee make? "))
+        
+    numProductsHum = eval(input("How many units an hour does your employee work on? "))
     numHoursHum = eval(input("How many hours a week does your employee work? "))
     numWeeksHum = eval(input("How many weeks per year does your employee work? "))
-    rawMaterialCost = eval(input("Cost of raw material per piece of product? "))
     laborCost = eval(input("How much (per hour) do you pay the employee? "))
+    rawMaterialCost = eval(input("Cost of raw materials per unit of product? "))
+
     
     
 
@@ -119,8 +126,8 @@ def main():
      #asking machine repair questions here: 
     maintenanceFreq = eval(input("How often does the "+name+" have to be inspected (per month)? "))
     #repairFreq = eval(input("How many repairs per month (on average)?"))
-    maintenanceCost = eval(input("How much does a single inspection visit cost? "))
-    repairCost = eval(input("How much does a single repair cost? "))
+    maintenanceCost = eval(input("How much does an inspection cost? "))
+    repairCost = eval(input("How much does a single repair cost (on average)? "))
     
     
     
@@ -129,7 +136,7 @@ def main():
     print("Maintenance Costs per year: $" + str(round(mCosts, 2)) ,"\nCalculated repair costs per year: $"+ str(round(rCosts, 2)))
 
 
-    productCost = eval(input("How much do you sell your product for? (A single item)"))
+    productCost = eval(input("How much do you sell your product for? (A single unit) "))
     totalPCost = productCost - rawMaterialCost
     numberSold = (numProductsMach-numProductsHum)*totalPCost
     annualSavings = ((materialSavings-mCosts-rCosts)+laborCostYear)+numberSold
@@ -137,7 +144,8 @@ def main():
     
     leaseTerm = eval(input("How long is the lease for in months? "))
     calculatedSavings = annualSavings * (leaseTerm/12)
-    print("Savings from leasing "+name+" opposed to paying an employee: $" + str(round(calculatedSavings, 2)))
+    print("Savings from leasing the "+name+" opposed to paying an employee: $" + str(round(calculatedSavings, 2)))
+    print("It isn't cost efficient to pay for a lease more than: $" + str(round(calculatedSavings, 2)))
 
     
 
@@ -162,9 +170,7 @@ def main():
 
     
 
-
 main()
-
 
 
 
