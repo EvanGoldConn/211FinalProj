@@ -1,71 +1,89 @@
 import random
 
 def materialSimulation(iterations, materialCost, numProductsHum, numProductsMach, workingHoursHum, workingHoursMach):
+    
+    #This method takes information pertaining to the cost due to human or machine error.
+    
     humanCost = 0
     machCost = 0
     for i in range(iterations):
-        machineMistakes = random.random()
+        machineMistakes = random.random()  #random number between 0 and 1 that is then divided by 200
         #print(machineMistakes)
-        machineMistakesRate = machineMistakes/200  #equivalent to less than half a percent
+        
+        machineMistakesRate = machineMistakes/200  #equivalent to less than half a percent 
+        #the greater the number it is divided by, lower the percentage
         #print(machineMistakesRate)
-        personMistakes = random.random()
+        
+        personMistakes = random.random() #random number between 0 and 1 that is then divided by 25
         #print(personMistakes)
-        personMistakesRate = personMistakes/25 #equivalent to the highest possible value being 4
+        
+        personMistakesRate = personMistakes/25 #equivalent to anything less than 4 percent
         
 
-        productMistakeHum = numProductsHum * personMistakesRate * workingHoursHum
-        humanCost += productMistakeHum 
-        #numProductsHum is determined by number of pieces a human makes in 1 year
-        productMistakeMach = numProductsMach * machineMistakesRate * workingHoursMach
+        productMistakeHum = numProductsHum * personMistakesRate * workingHoursHum 
+        #calculating the total number of mistakes due to human error
+        
+        humanCost += productMistakeHum #adds it to human cost for # of iterations
+        #numProductsHum is determined by number of pieces a human makes in 1 hour
+        
+        productMistakeMach = numProductsMach * machineMistakesRate * workingHoursMach 
+        #calculating the total number of mistakes due to machine error
         machCost += productMistakeMach 
-        #numProductsMach is determined by number of pieces a machine makes in 1 year
+        #numProductsMach is determined by number of pieces a machine makes in 1 hour
         
     
-    mistakeCostHum = (humanCost*materialCost)/iterations
+    mistakeCostHum = (humanCost*materialCost)/iterations 
+    #divides by # of iterations to get the average cost due to mistakes by human
     
     mistakeCostMach = (machCost*materialCost)/iterations
+    #divides by # of iterations to get the average cost due to mistakes by machine
     
-    return mistakeCostHum, mistakeCostMach
-
-    #difference = machineProduction - humanProduction
+    return mistakeCostHum, mistakeCostMach #return both values
     
     
     
 def maintenance(iterations, mFreq, machQual, mCost, rCost):
-    maintenanceYear = mFreq * 12
-    rFreq = 0
-    for i in range(iterations):
+    
+    #This method takes information pertaining to the maintenance of the machine.
+    #calculates the cost to maintain the machine
+    
+    maintenanceYear = mFreq * 12 #calculates the number of inspects required per year
+    rFreq = 0 #calculates the repair frequencies
+    for i in range(iterations): #iterates through all 1 million times 
+                                #and adds the percentages and then divides by the number of iterations
         if(machQual == 1):
-            rFreq += (random.random()/12.5) #percentage is 8%
+            rFreq += (random.random()/12.5) #percentage is less than 8%
         elif(machQual == 2):
-            rFreq += (random.random()/25) #percentage is 4%
+            rFreq += (random.random()/25) #percentage is less than 4%
         elif(machQual == 3):
-            rFreq += (random.random()/50) #percentage is 1.7%
+            rFreq += (random.random()/50) #percentage is less than 2%
     rFreq = rFreq/iterations   
     
-    repairYear = rFreq * 12
+    repairYear = rFreq * 12 #calculates the number of times a repair is required per year
     
-#    print(rFreq, repairYear)
+    #print(rFreq, repairYear)
     
-    maintenanceCost = maintenanceYear * mCost
-    repairCost = repairYear * rCost
+    maintenanceCost = maintenanceYear * mCost #calculates total maintenanceCost
+    repairCost = repairYear * rCost #calculates total repairCost
     
     #print(repairCost)
-    costs = [maintenanceCost, repairCost]
-    return costs
+    costs = [maintenanceCost, repairCost] 
+    return costs #returns the costs 
 
 def simulation(machUnitsPerHour, humUnitsPerHour, hoursOfUseMach, hoursOfUseHum,
                humPay, rawMaterialCost, productPrice, profitMargin, materialCost,
                materialSavings, mCosts, rCosts, annualSavings):
+    
+     #This method takes information pertaining to the overall simulation and prints all the information.
     print("\nASSUMED VALUES:\n")
     print("Units produced by machine per hour: "+ str(machUnitsPerHour))
     print("Units produced by human per hour: " +str(humUnitsPerHour))
     print("Total hours of machine use per year: "+str(hoursOfUseMach))
     print("Total working hours by employee per year: "+str(hoursOfUseHum))
     print("Hourly wage of employee: $"+str(humPay)+"/hour")
-    print("The raw material cost is: $"+str(rawMaterialCost))
-    print("The product selling price is: $"+str(productPrice))
-    print("The profit margin is: $"+str(profitMargin)+"\n")
+    print("Raw material cost: $"+str(rawMaterialCost))
+    print("Product selling price: $"+str(productPrice))
+    print("Profit margin: $"+str(profitMargin)+"\n")
     
     print("CALCULATED COSTS:\n")
     
@@ -78,34 +96,28 @@ def simulation(machUnitsPerHour, humUnitsPerHour, hoursOfUseMach, hoursOfUseHum,
     print("SAVINGS:")
     print("*note* These values do not account for the upfront \n       cost of lease."
           " It wouldn't be cost efficient \n       if the lease is less than these saving amounts.\n")
-    leaseTerm = 3
+    leaseTerm = 3 #prints out 4 different lease types (3 month, 6 month, 12 month and 24 month )
     for i in range(4):
         print(str(leaseTerm)+" month lease: $"+str(round(annualSavings * (leaseTerm/12), 2)))
-        leaseTerm += 3
+        leaseTerm *= 2
     
 
 def main():
-    
-    #potential machines to lease
-    #industrial dishwasher opposed to manually washing dishes
-    #t-shirt printer opposed to manually printing t-shirts
-    #wood-splitter opposed to manually splitting wood
+    iterations = 1000000 #1 million variations to cover all potential scenario's
 
-    iterations = 1000000 #ten thousand to start
-    #equipment = print(input("What is the cost of the machine?"))
-
-    machineWeeks = 0
     print("The purpose of this program is to help you decide whether it is more valuable "
           "to higher an employee (paid at a specific wage) or to lease a machine "
           "to do the same job. This program accounts for human error, working speed and "
-          "maintenance costs.\n")
+          "maintenance costs.\n") #header
     
-    userAnswer = int(input("Would you like to see possible options(1)? Or input your own data(2)? "))
+    userAnswer = int(input("Please select one of the options:\nInput your own information (1)?\nSee example simulations (2)?\n"))
+        #initial question for the user
     
-    if(userAnswer == 2):
+    if(userAnswer == 1): #if user asks to input their own data they get a series of questions
         name = input("What machine are you thinking of leasing? ")
         numProductsMach = eval(input("How many units an hour does the "+name+" operate on? "))
         numHoursMach = eval(input("How many hours a week is the "+ name+" operating? "))
+        machineWeeks = 0
         numWeeksMach = str(input("Does the "+name+" operate year-round(52 weeks)? Answer 'yes' or 'no'. "))
         if numWeeksMach == "yes":
             machineWeeks += 52
@@ -119,15 +131,16 @@ def main():
         rawMaterialCost = eval(input("Cost of raw materials per unit of product? "))
     
     
-        hoursOfUseHum = numHoursHum * numWeeksHum
+        hoursOfUseHum = numHoursHum * numWeeksHum  #calculates total number of hours a person works
         
-        laborCostYear = laborCost * hoursOfUseHum
+        laborCostYear = laborCost * hoursOfUseHum  #calculates total amount to pay a worker for how much they work
         #print(laborCostYear)
         #print(hoursOfUseHum)
-        hoursOfUseMach = numHoursMach * machineWeeks
+        hoursOfUseMach = numHoursMach * machineWeeks #calculates total number of hours a machine works
         
-        totalProductsHum = numProductsHum *hoursOfUseHum
-        totalProductsMach = numProductsMach *hoursOfUseMach
+        totalProductsHum = numProductsHum *hoursOfUseHum #calculates how many products a person makes
+        
+        totalProductsMach = numProductsMach *hoursOfUseMach #calculates how many products a machine makes
         #print(hoursOfUseMach)
         
         materialCost = materialSimulation(iterations, rawMaterialCost, numProductsHum, numProductsMach, hoursOfUseHum, hoursOfUseMach)
@@ -138,13 +151,12 @@ def main():
         materialSavings = round(materialCost[0]-materialCost[1], 2)
         
         
-         #asking machine repair questions here: 
+        #asking machine repair questions here: 
         maintenanceFreq = eval(input("How often does the "+name+" have to be inspected (per month)? "))
         #repairFreq = eval(input("How many repairs per month (on average)?"))
         maintenanceCost = eval(input("How much does an inspection cost? "))
         repairCost = eval(input("How much does a single repair cost (on average)? "))
         quality = int(input("What is the quality of the machine(1-2-3)? | (3 being very good) "))
-        
         
         
         costs = maintenance(iterations, maintenanceFreq, quality, maintenanceCost, repairCost)
@@ -153,29 +165,32 @@ def main():
     
     
         productCost = eval(input("How much do you sell your product for? (A single unit) "))
-        totalPCost = productCost - rawMaterialCost
-        numberSold = (totalProductsMach-totalProductsHum)*totalPCost
-        annualSavings = ((materialSavings-mCosts-rCosts)+laborCostYear)+numberSold
+        totalPCost = productCost - rawMaterialCost #calculates total product cost
+        numberSold = (totalProductsMach-totalProductsHum)*totalPCost #calculates number sold 
+        annualSavings = ((materialSavings-mCosts-rCosts)+laborCostYear)+numberSold #calculates annual savings
         print("Annual Savings from leasing the "+name+": $"+str(round(annualSavings, 2)))
         
         leaseTerm = eval(input("How long is the lease for in months? "))
-        calculatedSavings = annualSavings * (leaseTerm/12)
+        calculatedSavings = annualSavings * (leaseTerm/12) #takes annual savings and multiplies it by the num months of 12
         print("Savings from leasing the "+name+" opposed to paying an employee: $" + str(round(calculatedSavings, 2)))
         print("It isn't cost efficient to pay for a lease more than: $" + str(round(calculatedSavings, 2)))
         
-    elif(userAnswer == 1):
+    elif(userAnswer == 2): #selects to see other options 
         options = int(input("Which machine lease example would you like to see?\nPlease input number\n"
                             "1. Wood Splitter\n2. Clothing Design Printer\n3. Industrial Welder\nChoice: "))
         if (options == 1):  #wood splitter
+            #assumed inputs based on logic and online searches
             machUnitsPerHour = 350
             machHoursPerWeek = 40
             machWeeksPerYear = 30
             humUnitsPerHour = 100
             humHoursPerWeek = 40
             humWeeksPerYear = 30
-            humPay = 15
+            humPay = 15 #people who work in the lumber industry 
+                        #typically make good pay because of the dangers involved
             rawMaterialCost = 0.35
             
+            #calculations are the same as above 
             hoursOfUseHum = humHoursPerWeek * humWeeksPerYear
             laborCostYear = humPay * hoursOfUseHum
             hoursOfUseMach = machHoursPerWeek * machWeeksPerYear
@@ -183,6 +198,7 @@ def main():
             
             numProductsHum = humUnitsPerHour *hoursOfUseHum
             numProductsMach = machUnitsPerHour * hoursOfUseMach
+            
             inspectFreq = 2
             inspectCost = 40
             repairCost = 350
